@@ -29,11 +29,11 @@ function mapBookDtoToBook(dto: BookDto): Book {
   };
 }
 
-class BooksRepository {
+export class BooksRepository {
   httpGateway: ApiGateway;
 
-  constructor() {
-    this.httpGateway = new ApiGateway();
+  constructor(httpGateway: ApiGateway = new ApiGateway()) {
+    this.httpGateway = httpGateway;
   }
 
   getBooks = async (scope: BooksScope = "all"): Promise<Book[]> => {

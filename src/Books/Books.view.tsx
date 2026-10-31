@@ -28,12 +28,14 @@ export const BooksView = observer(({ listViewModel, createViewModel }: BooksView
       <div>
         <input
           type="text"
+          data-testid="book-name-input"
           value={createViewModel.name}
           disabled={createViewModel.isSubmitting}
           onChange={(e) => createViewModel.setName(e.target.value)}
         />
         <input
           type="text"
+          data-testid="book-author-input"
           value={createViewModel.author}
           disabled={createViewModel.isSubmitting}
           onChange={(e) => createViewModel.setAuthor(e.target.value)}
