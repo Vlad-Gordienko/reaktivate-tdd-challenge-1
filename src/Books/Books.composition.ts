@@ -1,5 +1,5 @@
-import { BooksListViewModel } from "./BooksList.viewModel";
-import { BooksCreateViewModel } from "./BooksCreate.viewModel";
+import { BooksListViewModel } from "./ViewModel/BooksList.viewModel";
+import { BooksCreateViewModel } from "./ViewModel/BooksCreate.viewModel";
 import { Book, BooksScope } from "./Books.repository";
 
 export interface BooksRepositoryDependency {

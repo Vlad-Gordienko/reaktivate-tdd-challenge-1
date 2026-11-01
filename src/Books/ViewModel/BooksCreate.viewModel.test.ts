@@ -1,5 +1,5 @@
 import { BooksCreateViewModel } from "./BooksCreate.viewModel";
-import { createDeferred } from "../testUtils";
+import { createDeferred } from "../../testUtils";
 
 describe("BooksCreateViewModel", () => {
   let mockRepository: { addBook: jest.Mock };

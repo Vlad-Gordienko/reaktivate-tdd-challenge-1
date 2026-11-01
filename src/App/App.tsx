@@ -1,8 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { BooksListViewModel } from "../Books/BooksList.viewModel";
-import { BooksCreateViewModel } from "../Books/BooksCreate.viewModel";
-import { BooksView } from "../Books/Books.view";
+import { BooksListViewModel } from "../Books/ViewModel/BooksList.viewModel";
+import { BooksCreateViewModel } from "../Books/ViewModel/BooksCreate.viewModel";
+import { BooksView } from "../Books/View/Books.view";
 import { AppHeader } from "./AppHeader";
 
 export interface AppProps {

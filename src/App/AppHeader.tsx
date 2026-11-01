@@ -1,5 +1,5 @@
 import React from "react";
-import { InfoBox } from "../UiKit/InfoBox/InfoBox";
+import { InfoBox } from "../UiKit/InfoBox";
 
 export interface AppHeaderProps {
   privateBooksCount: number;

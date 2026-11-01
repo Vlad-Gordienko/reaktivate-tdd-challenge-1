@@ -1,7 +1,7 @@
-import ApiGateway from "../Shared/ApiGateway";
-import { HttpError } from "../Shared/HttpError";
-import { HttpGateway } from "../Shared/HttpGateway";
-import { NetworkError } from "../Shared/NetworkError";
+import ApiGateway from "../Shared/Http/ApiGateway";
+import { HttpError } from "../Shared/Http/HttpError";
+import { HttpGateway } from "../Shared/Http/HttpGateway";
+import { NetworkError } from "../Shared/Http/NetworkError";
 import { USER_ID } from "../Shared/config";
 
 export type BooksScope = "all" | "private";

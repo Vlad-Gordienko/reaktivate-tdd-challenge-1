@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { Book, BooksError, BooksScope } from "./Books.repository";
-import { createLatestGuard } from "../Shared/latestGuard";
-import { withMinimumDuration } from "../Shared/minimumDuration";
+import { Book, BooksError, BooksScope } from "../Books.repository";
+import { createLatestGuard } from "../../Shared/async/latestGuard";
+import { withMinimumDuration } from "../../Shared/async/minimumDuration";
 
 function toBooksError(error: unknown): BooksError {
   if (error instanceof BooksError) {

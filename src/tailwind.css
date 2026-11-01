@@ -579,10 +579,6 @@ video {
   }
 }
 
-.visible {
-  visibility: visible;
-}
-
 .sticky {
   position: sticky;
 }

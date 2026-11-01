@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { BooksListViewModel } from "./BooksList.viewModel";
-import { BooksCreateViewModel } from "./BooksCreate.viewModel";
+import { BooksListViewModel } from "../ViewModel/BooksList.viewModel";
+import { BooksCreateViewModel } from "../ViewModel/BooksCreate.viewModel";
 import { BookCreateForm } from "./BookCreateForm";
 import { BooksScopeTabs } from "./BooksScopeTabs";
 import { BooksList } from "./BooksList";

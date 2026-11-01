@@ -1,6 +1,6 @@
 import React from "react";
-import { BooksErrorType } from "./Books.repository";
-import { InfoBox } from "../UiKit/InfoBox/InfoBox";
+import { BooksErrorType } from "../Books.repository";
+import { InfoBox } from "../../UiKit/InfoBox";
 
 export interface BooksErrorStateProps {
   errorKind: BooksErrorType;

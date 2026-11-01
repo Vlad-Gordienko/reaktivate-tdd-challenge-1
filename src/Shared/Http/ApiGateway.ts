@@ -1,4 +1,4 @@
-import {API_HOST} from "./config";
+import {API_HOST} from "../config";
 import {HttpError} from "./HttpError";
 import {HttpGateway} from "./HttpGateway";
 import {NetworkError} from "./NetworkError";

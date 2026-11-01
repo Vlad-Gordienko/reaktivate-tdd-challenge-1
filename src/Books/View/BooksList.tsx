@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { BooksListViewModel } from "./BooksList.viewModel";
+import { BooksListViewModel } from "../ViewModel/BooksList.viewModel";
 import { BookListItem } from "./BookListItem";
 import { BooksSkeletonList } from "./BooksSkeletonList";
 import { BooksEmptyState } from "./BooksEmptyState";

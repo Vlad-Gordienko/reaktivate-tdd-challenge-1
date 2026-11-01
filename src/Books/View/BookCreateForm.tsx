@@ -1,9 +1,9 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { BooksCreateViewModel } from "./BooksCreate.viewModel";
-import { Input } from "../UiKit/Input/Input";
-import { Button } from "../UiKit/Button/Button";
-import { InfoBox } from "../UiKit/InfoBox/InfoBox";
+import { BooksCreateViewModel } from "../ViewModel/BooksCreate.viewModel";
+import { Input } from "../../UiKit/Input";
+import { Button } from "../../UiKit/Button";
+import { InfoBox } from "../../UiKit/InfoBox";
 
 export interface BookCreateFormProps {
   viewModel: BooksCreateViewModel;

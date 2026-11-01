@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { sanitizeText } from "../Shared/sanitize";
-import { withMinimumDuration } from "../Shared/minimumDuration";
+import { sanitizeText } from "../../Shared/sanitize";
+import { withMinimumDuration } from "../../Shared/async/minimumDuration";
 
 const MIN_SUBMITTING_DURATION_MS = 120;
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, IconName } from "../Icon/Icon";
+import { Icon, IconName } from "./Icon";
 
 export interface InfoBoxProps {
   type: "info" | "error";

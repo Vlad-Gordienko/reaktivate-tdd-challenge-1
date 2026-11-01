@@ -1,5 +1,5 @@
 import React from "react";
-import { Skeleton } from "../UiKit/Skeleton/Skeleton";
+import { Skeleton } from "../../UiKit/Skeleton";
 
 export interface BooksSkeletonListProps {
   count?: number;

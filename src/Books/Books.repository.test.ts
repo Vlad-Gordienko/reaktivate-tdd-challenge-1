@@ -1,5 +1,5 @@
 import { BooksRepository } from "./Books.repository";
-import ApiGateway from "../Shared/ApiGateway";
+import ApiGateway from "../Shared/Http/ApiGateway";
 
 function createFakeGateway(): jest.Mocked<ApiGateway> {
   return {

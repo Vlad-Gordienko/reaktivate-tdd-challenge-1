@@ -1,6 +1,6 @@
 import { BooksListViewModel } from "./BooksList.viewModel";
-import { Book } from "./Books.repository";
-import { createDeferred, flushPromises } from "../testUtils";
+import { Book } from "../Books.repository";
+import { createDeferred, flushPromises } from "../../testUtils";
 
 const sampleBooks: Book[] = [
   { id: "1", name: "Clean Code", author: "Robert C. Martin" },
