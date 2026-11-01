@@ -20,5 +20,3 @@ export const BooksScopeTabs = observer(({ viewModel }: BooksScopeTabsProps) => {
     />
   );
 });
-
-export default BooksScopeTabs;

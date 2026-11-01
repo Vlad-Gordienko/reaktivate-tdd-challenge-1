@@ -38,5 +38,3 @@ export const Input = ({
     />
   );
 };
-
-export default Input;

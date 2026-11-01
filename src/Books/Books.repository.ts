@@ -23,6 +23,14 @@ export interface Book {
   author: string;
 }
 
+export interface BooksListRepository {
+  getBooks(scope?: BooksScope): Promise<Book[]>;
+}
+
+export interface BooksCreateRepository {
+  addBook(payload: { name: string; author: string }): Promise<boolean>;
+}
+
 export type BooksErrorType = "network" | "server" | "unknown";
 
 export class BooksError extends Error {
@@ -46,17 +54,17 @@ function mapBookDtoToBook(dto: BookDto): Book {
 }
 
 export class BooksRepository {
-  httpGateway: HttpGateway;
+  private readonly httpGateway: HttpGateway;
 
   constructor(httpGateway: HttpGateway = new ApiGateway()) {
     this.httpGateway = httpGateway;
   }
 
   getBooks = async (scope: BooksScope = "all"): Promise<Book[]> => {
-    const path = scope === "private" ? `${BOOKS_BASE_PATH}/private` : `${BOOKS_BASE_PATH}`;
+    const path = scope === "private" ? `${BOOKS_BASE_PATH}/private` : BOOKS_BASE_PATH;
     let booksDto: BookDto[];
     try {
-      booksDto = await this.httpGateway.get(path);
+      booksDto = await this.httpGateway.get<BookDto[]>(path);
     } catch (error) {
       if (error instanceof HttpError) {
         throw new BooksError("server", error.message);
@@ -71,7 +79,7 @@ export class BooksRepository {
 
   addBook = async ({ name, author }: { name: string; author: string }): Promise<boolean> => {
     try {
-      const bookAddDto = await this.httpGateway.post(`${BOOKS_BASE_PATH}`, { name, author });
+      const bookAddDto = await this.httpGateway.post<{ status: string }>(BOOKS_BASE_PATH, { name, author });
       return !!(bookAddDto && bookAddDto.status === "ok");
     } catch {
       // add book contract is boolean

@@ -26,5 +26,3 @@ export const InfoBox = ({ type, children }: InfoBoxProps) => {
     </div>
   );
 };
-
-export default InfoBox;

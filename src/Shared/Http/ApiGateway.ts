@@ -12,14 +12,14 @@ async function toResponse(request: Promise<Response>): Promise<Response> {
 }
 
 export default class ApiGateway implements HttpGateway {
-  get = async (path: string): Promise<any> => {
+  get = async <T>(path: string): Promise<T> => {
     const response = await toResponse(fetch(`${API_HOST}${path}`));
     if (!response.ok) {
       throw new HttpError(response.status);
     }
     return response.json(); // DTO
   };
-  post = async (path: string, payload: object): Promise<any> => {
+  post = async <T>(path: string, payload: object): Promise<T> => {
     const response = await toResponse(
       fetch(`${API_HOST}${path}`, {
         method: "POST",

@@ -15,5 +15,3 @@ export const Skeleton = ({ className, width, height }: SkeletonProps) => {
     />
   );
 };
-
-export default Skeleton;

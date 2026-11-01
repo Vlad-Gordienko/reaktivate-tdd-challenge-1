@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { Book, BooksError, BooksScope } from "../Books.repository";
+import { Book, BooksError, BooksListRepository, BooksScope } from "../Books.repository";
 import { createLatestGuard } from "../../Shared/async/latestGuard";
 import { withMinimumDuration } from "../../Shared/async/minimumDuration";
 
@@ -18,17 +18,17 @@ export class BooksListViewModel {
   scope: BooksScope = "all";
   privateBooksCount: number = 0;
   error: BooksError | null = null;
-  repository: {
-    getBooks: (scope?: BooksScope) => Promise<Book[]>;
-  };
+  private readonly repository: BooksListRepository;
   private booksGuard = createLatestGuard();
   private privateCountGuard = createLatestGuard();
 
-  constructor(booksRepository: {
-    getBooks: (scope?: BooksScope) => Promise<Book[]>;
-  }) {
+  constructor(booksRepository: BooksListRepository) {
     this.repository = booksRepository;
-    makeAutoObservable(this);
+    makeAutoObservable<this, "repository" | "booksGuard" | "privateCountGuard">(this, {
+      repository: false,
+      booksGuard: false,
+      privateCountGuard: false,
+    });
   }
 
   get isEmpty(): boolean {
@@ -85,5 +85,3 @@ export class BooksListViewModel {
     this.loadBooks();
   };
 }
-
-export default BooksListViewModel;

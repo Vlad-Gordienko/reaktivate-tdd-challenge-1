@@ -16,5 +16,3 @@ export const BooksErrorState = ({ errorKind }: BooksErrorStateProps) => {
   const message = messages[errorKind] ?? messages.unknown;
   return <InfoBox type="error">{message}</InfoBox>;
 };
-
-export default BooksErrorState;

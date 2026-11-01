@@ -9,5 +9,3 @@ export interface SpinnerProps {
 export const Spinner = ({ className, size }: SpinnerProps) => {
   return <Icon name="spinner" size={size} className={`animate-spin ${className ?? ""}`.trim()} />;
 };
-
-export default Spinner;

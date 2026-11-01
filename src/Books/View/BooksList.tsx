@@ -28,5 +28,3 @@ export const BooksList = observer(({ viewModel }: BooksListProps) => {
     </ul>
   );
 });
-
-export default BooksList;

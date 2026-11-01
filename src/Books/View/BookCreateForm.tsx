@@ -43,5 +43,3 @@ export const BookCreateForm = observer(({ viewModel }: BookCreateFormProps) => {
     </div>
   );
 });
-
-export default BookCreateForm;

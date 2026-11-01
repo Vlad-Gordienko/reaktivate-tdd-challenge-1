@@ -12,5 +12,3 @@ export const BookListItem = ({ book }: BookListItemProps) => {
     </li>
   );
 };
-
-export default BookListItem;

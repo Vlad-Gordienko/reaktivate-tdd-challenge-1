@@ -38,5 +38,3 @@ export const Tabs = ({ options, value, onChange }: TabsProps) => {
     </div>
   );
 };
-
-export default Tabs;

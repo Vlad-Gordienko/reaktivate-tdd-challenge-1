@@ -46,5 +46,3 @@ export const Icon = ({ name, className, size = 20 }: IconProps) => {
     </svg>
   );
 };
-
-export default Icon;

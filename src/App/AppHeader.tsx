@@ -12,5 +12,3 @@ export const AppHeader = ({ privateBooksCount }: AppHeaderProps) => {
     </header>
   );
 };
-
-export default AppHeader;

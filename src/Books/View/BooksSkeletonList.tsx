@@ -14,5 +14,3 @@ export const BooksSkeletonList = ({ count = 3 }: BooksSkeletonListProps) => {
     </div>
   );
 };
-
-export default BooksSkeletonList;

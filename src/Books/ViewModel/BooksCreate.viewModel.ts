@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { sanitizeText } from "../../Shared/sanitize";
 import { withMinimumDuration } from "../../Shared/async/minimumDuration";
+import { BooksCreateRepository } from "../Books.repository";
 
 const MIN_SUBMITTING_DURATION_MS = 120;
 
@@ -9,20 +10,16 @@ export class BooksCreateViewModel {
   author: string = "";
   isSubmitting: boolean = false;
   formError: string | null = null;
-  repository: {
-    addBook: (payload: { name: string; author: string }) => Promise<boolean>;
-  };
-  private onBookAdded: () => void;
+  private readonly repository: BooksCreateRepository;
+  private readonly onBookAdded: () => void;
 
-  constructor(
-    booksRepository: {
-      addBook: (payload: { name: string; author: string }) => Promise<boolean>;
-    },
-    onBookAdded: () => void
-  ) {
+  constructor(booksRepository: BooksCreateRepository, onBookAdded: () => void) {
     this.repository = booksRepository;
     this.onBookAdded = onBookAdded;
-    makeAutoObservable(this);
+    makeAutoObservable<this, "repository" | "onBookAdded">(this, {
+      repository: false,
+      onBookAdded: false,
+    });
   }
 
   setName = (value: string): void => {
@@ -75,5 +72,3 @@ export class BooksCreateViewModel {
     }
   };
 }
-
-export default BooksCreateViewModel;

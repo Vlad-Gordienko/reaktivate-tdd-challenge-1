@@ -20,5 +20,3 @@ export const BooksView = observer(({ listViewModel, createViewModel }: BooksView
     </div>
   );
 });
-
-export default BooksView;

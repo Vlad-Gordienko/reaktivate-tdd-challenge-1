@@ -20,5 +20,3 @@ export const App = observer(({ listViewModel, createViewModel }: AppProps) => {
     </>
   );
 });
-
-export default App;
