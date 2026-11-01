@@ -17,3 +17,8 @@ npm run build        # production build
 - `src/Books` — domain logic and components
 - `src/Shared`, `src/UiKit` — reusable utilities and UI
 - `e2e` — Playwright tests
+
+## Architecture notes
+Views branch on already-computed ViewModel state (`isLoading`, `error`, `isEmpty`) to pick
+what to render. This is presentational, not business logic — it stays in the View to avoid
+the ViewModel depending on JSX.
