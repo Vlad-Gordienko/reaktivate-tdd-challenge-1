@@ -24,7 +24,7 @@ describe("BooksCreateViewModel", () => {
 
     await viewModel.submitNewBook();
 
-    expect(viewModel.validationError).toBe("Name and author are required");
+    expect(viewModel.formError).toBe("Name and author are required");
     expect(mockRepository.addBook).not.toHaveBeenCalled();
   });
 
@@ -126,19 +126,19 @@ describe("BooksCreateViewModel", () => {
 
   test("setName clears an existing validation error", async () => {
     await viewModel.submitNewBook();
-    expect(viewModel.validationError).toBe("Name and author are required");
+    expect(viewModel.formError).toBe("Name and author are required");
 
     viewModel.setName("something");
 
-    expect(viewModel.validationError).toBeNull();
+    expect(viewModel.formError).toBeNull();
   });
 
   test("setAuthor clears an existing validation error", async () => {
     await viewModel.submitNewBook();
-    expect(viewModel.validationError).toBe("Name and author are required");
+    expect(viewModel.formError).toBe("Name and author are required");
 
     viewModel.setAuthor("something");
 
-    expect(viewModel.validationError).toBeNull();
+    expect(viewModel.formError).toBeNull();
   });
 });

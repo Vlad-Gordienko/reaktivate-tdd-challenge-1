@@ -63,7 +63,7 @@ test.describe("Books page (mocked API)", () => {
     await page.goto("/");
     await expect(page.getByText("Frank Herbert: Dune", { exact: true })).toBeVisible();
 
-    await page.getByRole("button", { name: "Private books" }).click();
+    await page.getByRole("tab", { name: "Private books" }).click();
 
     await expect(page.getByText("William Gibson: Neuromancer", { exact: true })).toBeVisible();
     await expect(page.getByText("Frank Herbert: Dune", { exact: true })).toHaveCount(0);

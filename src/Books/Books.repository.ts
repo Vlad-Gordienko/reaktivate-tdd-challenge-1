@@ -1,4 +1,7 @@
 import ApiGateway from "../Shared/ApiGateway";
+import { HttpError } from "../Shared/HttpError";
+import { HttpGateway } from "../Shared/HttpGateway";
+import { NetworkError } from "../Shared/NetworkError";
 import { USER_ID } from "../Shared/config";
 
 export type BooksScope = "all" | "private";
@@ -20,6 +23,19 @@ export interface Book {
   author: string;
 }
 
+export type BooksErrorType = "network" | "server" | "unknown";
+
+export class BooksError extends Error {
+  type: BooksErrorType;
+
+  constructor(type: BooksErrorType, message?: string) {
+    super(message ?? type);
+    this.name = "BooksError";
+    this.type = type;
+    Object.setPrototypeOf(this, BooksError.prototype);
+  }
+}
+
 function mapBookDtoToBook(dto: BookDto): Book {
   return {
     // Workaround: backend does not return an id for newly created books
@@ -30,21 +46,37 @@ function mapBookDtoToBook(dto: BookDto): Book {
 }
 
 export class BooksRepository {
-  httpGateway: ApiGateway;
+  httpGateway: HttpGateway;
 
-  constructor(httpGateway: ApiGateway = new ApiGateway()) {
+  constructor(httpGateway: HttpGateway = new ApiGateway()) {
     this.httpGateway = httpGateway;
   }
 
   getBooks = async (scope: BooksScope = "all"): Promise<Book[]> => {
     const path = scope === "private" ? `${BOOKS_BASE_PATH}/private` : `${BOOKS_BASE_PATH}`;
-    const booksDto: BookDto[] = await this.httpGateway.get(path);
+    let booksDto: BookDto[];
+    try {
+      booksDto = await this.httpGateway.get(path);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        throw new BooksError("server", error.message);
+      }
+      if (error instanceof NetworkError) {
+        throw new BooksError("network", error.message);
+      }
+      throw new BooksError("unknown", error instanceof Error ? error.message : undefined);
+    }
     return booksDto.map(mapBookDtoToBook);
   };
 
   addBook = async ({ name, author }: { name: string; author: string }): Promise<boolean> => {
-    const bookAddDto = await this.httpGateway.post(`${BOOKS_BASE_PATH}`, { name, author });
-    return !!(bookAddDto && bookAddDto.status === "ok");
+    try {
+      const bookAddDto = await this.httpGateway.post(`${BOOKS_BASE_PATH}`, { name, author });
+      return !!(bookAddDto && bookAddDto.status === "ok");
+    } catch {
+      // add book contract is boolean
+      return false;
+    }
   };
 }
 

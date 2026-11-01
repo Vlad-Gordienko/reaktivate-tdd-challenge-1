@@ -2,6 +2,9 @@ import React from "react";
 import { observer } from "mobx-react";
 import { BooksListViewModel } from "./BooksList.viewModel";
 import { BooksCreateViewModel } from "./BooksCreate.viewModel";
+import { BookCreateForm } from "./BookCreateForm";
+import { BooksScopeTabs } from "./BooksScopeTabs";
+import { BooksList } from "./BooksList";
 
 interface BooksViewProps {
   listViewModel: BooksListViewModel;
@@ -10,46 +13,10 @@ interface BooksViewProps {
 
 export const BooksView = observer(({ listViewModel, createViewModel }: BooksViewProps) => {
   return (
-    <div>
-      <div>Your books: {listViewModel.privateBooksCount}</div>
-      <div>
-        <button onClick={() => listViewModel.setScope("all")}>All books</button>
-        <button onClick={() => listViewModel.setScope("private")}>Private books</button>
-      </div>
-      {listViewModel.isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        listViewModel.books.map((book) => (
-          <div key={book.id}>
-            {book.author}: {book.name}
-          </div>
-        ))
-      )}
-      <div>
-        <input
-          type="text"
-          data-testid="book-name-input"
-          value={createViewModel.name}
-          disabled={createViewModel.isSubmitting}
-          onChange={(e) => createViewModel.setName(e.target.value)}
-        />
-        <input
-          type="text"
-          data-testid="book-author-input"
-          value={createViewModel.author}
-          disabled={createViewModel.isSubmitting}
-          onChange={(e) => createViewModel.setAuthor(e.target.value)}
-        />
-        <button
-          type="button"
-          disabled={createViewModel.isSubmitting}
-          onClick={() => createViewModel.submitNewBook()}
-        >
-          Add
-        </button>
-        {createViewModel.isSubmitting && <span>Loading...</span>}
-        {createViewModel.validationError && <div>{createViewModel.validationError}</div>}
-      </div>
+    <div className="flex flex-col gap-6">
+      <BookCreateForm viewModel={createViewModel} />
+      <BooksScopeTabs viewModel={listViewModel} />
+      <BooksList viewModel={listViewModel} />
     </div>
   );
 });

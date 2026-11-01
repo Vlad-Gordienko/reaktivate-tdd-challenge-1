@@ -1,11 +1,14 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { sanitizeText } from "../Shared/sanitize";
+import { withMinimumDuration } from "../Shared/minimumDuration";
+
+const MIN_SUBMITTING_DURATION_MS = 120;
 
 export class BooksCreateViewModel {
   name: string = "";
   author: string = "";
   isSubmitting: boolean = false;
-  validationError: string | null = null;
+  formError: string | null = null;
   repository: {
     addBook: (payload: { name: string; author: string }) => Promise<boolean>;
   };
@@ -24,12 +27,12 @@ export class BooksCreateViewModel {
 
   setName = (value: string): void => {
     this.name = value;
-    this.validationError = null;
+    this.formError = null;
   };
 
   setAuthor = (value: string): void => {
     this.author = value;
-    this.validationError = null;
+    this.formError = null;
   };
 
   submitNewBook = async (): Promise<void> => {
@@ -40,21 +43,26 @@ export class BooksCreateViewModel {
     const trimmedName = sanitizeText(this.name.trim());
     const trimmedAuthor = sanitizeText(this.author.trim());
     if (!trimmedName || !trimmedAuthor) {
-      this.validationError = "Name and author are required";
+      this.formError = "Name and author are required";
       return;
     }
 
-    this.validationError = null;
+    this.formError = null;
     this.isSubmitting = true;
     try {
-      const added = await this.repository.addBook({
-        name: trimmedName,
-        author: trimmedAuthor,
-      });
+      const added = await withMinimumDuration(
+        this.repository.addBook({
+          name: trimmedName,
+          author: trimmedAuthor,
+        }),
+        MIN_SUBMITTING_DURATION_MS
+      );
       runInAction(() => {
         if (added) {
           this.name = "";
           this.author = "";
+        } else {
+          this.formError = "Failed to add the book. Please try again.";
         }
       });
       if (added) {

@@ -1,16 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import "./styles.css";
+import "./reset.css";
+import "./tailwind.css";
 import booksRepository from "./Books/Books.repository";
 import { createBooksViewModels } from "./Books/Books.composition";
-import { BooksView } from "./Books/Books.view";
+import { App } from "./App/App";
 
 const { listViewModel, createViewModel, fetchAll } = createBooksViewModels(booksRepository);
 fetchAll();
 
 const rootElement = document.getElementById("root")!;
 ReactDOM.render(
-  <BooksView listViewModel={listViewModel} createViewModel={createViewModel} />,
+  <App listViewModel={listViewModel} createViewModel={createViewModel} />,
   rootElement
 );
