@@ -7,9 +7,9 @@ export type BooksRepositoryDependency = BooksListRepository & BooksCreateReposit
 export function createBooksViewModels(repository: BooksRepositoryDependency) {
   const listViewModel = new BooksListViewModel(repository);
 
-  const fetchAll = (): void => {
-    listViewModel.loadBooks();
-    listViewModel.refreshPrivateCount();
+  const fetchAll = async (): Promise<void> => {
+    await listViewModel.loadBooks();
+    await listViewModel.refreshPrivateCount();
   };
 
   const createViewModel = new BooksCreateViewModel(repository, fetchAll);
