@@ -1,6 +1,8 @@
 import { BooksListViewModel } from "./BooksList.viewModel";
-import { Book } from "../Books.repository";
-import { createDeferred, flushPromises } from "../../testUtils";
+import { createDeferred, createMockBooksRepository, flushPromises } from "../../testUtils";
+import {Book, BooksResult} from "../Books.type";
+
+const ok = <T>(value: T): BooksResult<T> => ({ ok: true, value });
 
 const sampleBooks: Book[] = [
   { id: "1", name: "Clean Code", author: "Robert C. Martin" },
@@ -13,21 +15,17 @@ const threePrivateBooks: Book[] = [
   { id: "12", name: "Private Three", author: "Z" },
 ];
 
-function createMockRepository() {
-  return { getBooks: jest.fn() };
-}
-
 describe("BooksListViewModel", () => {
-  let mockRepository: ReturnType<typeof createMockRepository>;
+  let mockRepository: ReturnType<typeof createMockBooksRepository>;
   let viewModel: BooksListViewModel;
 
   beforeEach(() => {
-    mockRepository = createMockRepository();
+    mockRepository = createMockBooksRepository();
     viewModel = new BooksListViewModel(mockRepository);
   });
 
   it("loadBooks populates books with the fetched result", async () => {
-    mockRepository.getBooks.mockResolvedValueOnce(sampleBooks);
+    mockRepository.getBooks.mockResolvedValueOnce(ok(sampleBooks));
 
     await viewModel.loadBooks();
 
@@ -35,13 +33,13 @@ describe("BooksListViewModel", () => {
   });
 
   it("loadBooks toggles isLoading around the request", async () => {
-    const deferred = createDeferred<Book[]>();
+    const deferred = createDeferred<BooksResult<Book[]>>();
     mockRepository.getBooks.mockReturnValueOnce(deferred.promise);
 
     const call = viewModel.loadBooks();
     expect(viewModel.isLoading).toBe(true);
 
-    deferred.resolve(sampleBooks);
+    deferred.resolve(ok(sampleBooks));
     await call;
 
     expect(viewModel.isLoading).toBe(false);
@@ -50,8 +48,8 @@ describe("BooksListViewModel", () => {
   it("discards a stale loadBooks response when a newer call has started", async () => {
     const firstBooks: Book[] = [{ id: "1", name: "First", author: "A" }];
     const secondBooks: Book[] = [{ id: "2", name: "Second", author: "B" }];
-    const deferred1 = createDeferred<Book[]>();
-    const deferred2 = createDeferred<Book[]>();
+    const deferred1 = createDeferred<BooksResult<Book[]>>();
+    const deferred2 = createDeferred<BooksResult<Book[]>>();
     mockRepository.getBooks
       .mockReturnValueOnce(deferred1.promise)
       .mockReturnValueOnce(deferred2.promise);
@@ -59,9 +57,9 @@ describe("BooksListViewModel", () => {
     const call1 = viewModel.loadBooks();
     const call2 = viewModel.loadBooks();
 
-    deferred2.resolve(secondBooks);
+    deferred2.resolve(ok(secondBooks));
     await call2;
-    deferred1.resolve(firstBooks);
+    deferred1.resolve(ok(firstBooks));
     await call1;
 
     expect(viewModel.books).toEqual(secondBooks);
@@ -69,7 +67,7 @@ describe("BooksListViewModel", () => {
   });
 
   it("setScope to a different scope updates scope and triggers loadBooks", async () => {
-    mockRepository.getBooks.mockResolvedValue(sampleBooks);
+    mockRepository.getBooks.mockResolvedValue(ok(sampleBooks));
 
     viewModel.setScope("private");
     await flushPromises();
@@ -80,7 +78,7 @@ describe("BooksListViewModel", () => {
   });
 
   it("setScope to the current scope is a no-op", async () => {
-    mockRepository.getBooks.mockResolvedValue(sampleBooks);
+    mockRepository.getBooks.mockResolvedValue(ok(sampleBooks));
 
     viewModel.setScope("private");
     await flushPromises();
@@ -94,7 +92,7 @@ describe("BooksListViewModel", () => {
   });
 
   it("refreshPrivateCount reuses the list fetch after switching to private (one total getBooks call)", async () => {
-    mockRepository.getBooks.mockResolvedValue(threePrivateBooks);
+    mockRepository.getBooks.mockResolvedValue(ok(threePrivateBooks));
 
     viewModel.setScope("all");
     await flushPromises();
@@ -113,7 +111,7 @@ describe("BooksListViewModel", () => {
 
   it("refreshPrivateCount on scope 'all' fetches private books and sets the count", async () => {
     mockRepository.getBooks.mockImplementation((scope: string) =>
-      Promise.resolve(scope === "private" ? threePrivateBooks : [])
+      Promise.resolve(ok(scope === "private" ? threePrivateBooks : []))
     );
 
     await viewModel.refreshPrivateCount();

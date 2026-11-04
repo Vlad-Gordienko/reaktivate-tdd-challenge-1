@@ -1,10 +1,8 @@
 import { BooksListViewModel } from "./ViewModel/BooksList.viewModel";
 import { BooksCreateViewModel } from "./ViewModel/BooksCreate.viewModel";
-import { BooksCreateRepository, BooksListRepository } from "./Books.repository";
+import {BooksRepositoryI} from "./Books.type";
 
-export type BooksRepositoryDependency = BooksListRepository & BooksCreateRepository;
-
-export function createBooksViewModels(repository: BooksRepositoryDependency) {
+export function createBooksViewModels(repository: BooksRepositoryI) {
   const listViewModel = new BooksListViewModel(repository);
 
   const fetchAll = async (): Promise<void> => {

@@ -1,8 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { BooksListViewModel } from "../ViewModel/BooksList.viewModel";
-import { BooksScope } from "../Books.repository";
 import { Tabs } from "../../UiKit/Tabs";
+import {BooksScope} from "../Books.type";
 
 export interface BooksScopeTabsProps {
   viewModel: BooksListViewModel;

@@ -1,5 +1,6 @@
 import React from "react";
-import { Book } from "../Books.repository";
+
+import {Book} from "../Books.type";
 
 export interface BookListItemProps {
   book: Book;

@@ -1,7 +1,8 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { sanitizeText } from "../../Shared/sanitize";
 import { withMinimumDuration } from "../../Shared/async/minimumDuration";
-import { BooksCreateRepository } from "../Books.repository";
+
+import {BooksRepositoryI} from "../Books.type";
 
 const MIN_SUBMITTING_DURATION_MS = 120;
 
@@ -10,10 +11,10 @@ export class BooksCreateViewModel {
   author: string = "";
   isSubmitting: boolean = false;
   formError: string | null = null;
-  private readonly repository: BooksCreateRepository;
+  private readonly repository: BooksRepositoryI;
   private readonly onBookAdded: () => void;
 
-  constructor(booksRepository: BooksCreateRepository, onBookAdded: () => void) {
+  constructor(booksRepository: BooksRepositoryI, onBookAdded: () => void) {
     this.repository = booksRepository;
     this.onBookAdded = onBookAdded;
     makeAutoObservable<this, "repository" | "onBookAdded">(this, {

@@ -1,13 +1,13 @@
 import { BooksCreateViewModel } from "./BooksCreate.viewModel";
-import { createDeferred } from "../../testUtils";
+import { createDeferred, createMockBooksRepository } from "../../testUtils";
 
 describe("BooksCreateViewModel", () => {
-  let mockRepository: { addBook: jest.Mock };
+  let mockRepository: ReturnType<typeof createMockBooksRepository>;
   let onBookAdded: jest.Mock;
   let viewModel: BooksCreateViewModel;
 
   beforeEach(() => {
-    mockRepository = { addBook: jest.fn() };
+    mockRepository = createMockBooksRepository();
     onBookAdded = jest.fn();
     viewModel = new BooksCreateViewModel(mockRepository, onBookAdded);
   });

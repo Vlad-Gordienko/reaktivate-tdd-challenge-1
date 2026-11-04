@@ -1,6 +1,6 @@
 import { createBooksViewModels } from "./Books.composition";
-import { Book } from "./Books.repository";
 import { flushPromises } from "../testUtils";
+import {Book} from "./Books.type";
 
 describe("createBooksViewModels", () => {
   it("refreshes the list and private count after a successful book creation", async () => {
@@ -15,7 +15,7 @@ describe("createBooksViewModels", () => {
       addBook: jest.fn(),
     };
 
-    mockRepository.getBooks.mockResolvedValue(updatedBooks);
+    mockRepository.getBooks.mockResolvedValue({ ok: true, value: updatedBooks });
     mockRepository.addBook.mockResolvedValue(true);
 
     const { listViewModel, createViewModel } = createBooksViewModels(mockRepository);

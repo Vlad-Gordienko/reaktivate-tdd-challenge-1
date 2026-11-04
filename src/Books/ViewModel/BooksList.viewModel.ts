@@ -1,14 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { Book, BooksError, BooksListRepository, BooksScope } from "../Books.repository";
 import { createLatestGuard } from "../../Shared/async/latestGuard";
 import { withMinimumDuration } from "../../Shared/async/minimumDuration";
-
-function toBooksError(error: unknown): BooksError {
-  if (error instanceof BooksError) {
-    return error;
-  }
-  return new BooksError("unknown", error instanceof Error ? error.message : undefined);
-}
+import {Book, BooksErrorI, BooksRepositoryI, BooksScope} from "../Books.type";
 
 const MIN_LOADING_DURATION_MS = 120;
 
@@ -17,12 +10,12 @@ export class BooksListViewModel {
   isLoading: boolean = false;
   scope: BooksScope = "all";
   privateBooksCount: number = 0;
-  error: BooksError | null = null;
-  private readonly repository: BooksListRepository;
+  error: BooksErrorI | null = null;
+  private readonly repository: BooksRepositoryI;
   private booksGuard = createLatestGuard();
   private privateCountGuard = createLatestGuard();
 
-  constructor(booksRepository: BooksListRepository) {
+  constructor(booksRepository: BooksRepositoryI) {
     this.repository = booksRepository;
     makeAutoObservable<this, "repository" | "booksGuard" | "privateCountGuard">(this, {
       repository: false,
@@ -38,27 +31,23 @@ export class BooksListViewModel {
   loadBooks = async (): Promise<void> => {
     const isStale = this.booksGuard();
     this.isLoading = true;
-    try {
-      const books = await withMinimumDuration(
-        this.repository.getBooks(this.scope),
-        MIN_LOADING_DURATION_MS
-      );
-      runInAction(() => {
-        if (!isStale()) {
-          this.books = books;
-          this.error = null;
-          this.isLoading = false;
-        }
-      });
-    } catch (error) {
-      runInAction(() => {
-        if (!isStale()) {
-          // Previously loaded books are intentionally kept on failure.
-          this.error = toBooksError(error);
-          this.isLoading = false;
-        }
-      });
-    }
+    const result = await withMinimumDuration(
+      this.repository.getBooks(this.scope),
+      MIN_LOADING_DURATION_MS
+    );
+    runInAction(() => {
+      if (isStale()) {
+        return;
+      }
+      if (result.ok) {
+        this.books = result.value;
+        this.error = null;
+      } else {
+        // Previously loaded books are intentionally kept on failure.
+        this.error = result.error;
+      }
+      this.isLoading = false;
+    });
   };
 
   refreshPrivateCount = async (): Promise<void> => {
@@ -67,14 +56,12 @@ export class BooksListViewModel {
       return;
     }
     const isStale = this.privateCountGuard();
-    try {
-      const privateBooks = await this.repository.getBooks("private");
-      runInAction(() => {
-        if (!isStale()) {
-          this.privateBooksCount = privateBooks.length;
-        }
-      });
-    } catch {}
+    const result = await this.repository.getBooks("private");
+    runInAction(() => {
+      if (!isStale() && result.ok) {
+        this.privateBooksCount = result.value.length;
+      }
+    });
   };
 
   setScope = (scope: BooksScope): void => {
